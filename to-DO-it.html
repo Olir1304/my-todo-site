@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Soft To-Do 🌸</title>
+
+  <style>
+    body {
+      font-family: "Segoe UI";
+      text-align: center;
+      background: linear-gradient(135deg, #ffd6e0, #d6f0ff);
+      transition: 0.5s;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    .theme-btn {
+      margin: 5px;
+      padding: 8px;
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+
+    input {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 10px;
+      border: none;
+    }
+
+    button {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: white;
+      margin: 10px auto;
+      padding: 10px;
+      width: 280px;
+      border-radius: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .done {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    .stickers {
+      position: fixed;
+      font-size: 30px;
+      opacity: 0.4;
+    }
+
+    #archive {
+      margin-top: 20px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🌸 Soft To-Do List</h1>
+
+  <!-- DATE -->
+  <p id="date"></p>
+
+  <!-- THEME SWITCH -->
+  <div>
+    <button class="theme-btn" onclick="setTheme('pink')">🌸</button>
+    <button class="theme-btn" onclick="setTheme('blue')">💧</button>
+    <button class="theme-btn" onclick="setTheme('dark')">🌙</button>
+  </div>
+
+  <!-- INPUT -->
+  <input type="text" id="taskInput" placeholder="your task...">
+  <input type="number" id="timeInput" placeholder="mins (optional)">
+  <button onclick="addTask()">Add ✨</button>
+
+  <!-- TASK LIST -->
+  <ul id="taskList"></ul>
+
+  <!-- ARCHIVE -->
+  <h3>🗂️ Archive</h3>
+  <ul id="archive"></ul>
+
+  <!-- STICKERS -->
+  <div class="stickers" style="top:10%; left:5%">🌷</div>
+  <div class="stickers" style="top:60%; left:80%">🧸</div>
+  <div class="stickers" style="top:30%; left:70%">☁️</div>
+  <div class="stickers" style="top:80%; left:20%">✨</div>
+
+  <script>
+
+    // DATE
+    let today = new Date();
+    document.getElementById("date").innerText = today.toDateString();
+
+    // DEFAULT TASKS
+    window.onload = function() {
+      addTask("Drink water 💧");
+      addTask("Do homework 📚");
+    }
+
+    function setTheme(theme) {
+      if(theme === "pink") {
+        document.body.style.background = "linear-gradient(135deg,#ffd6e0,#fff)";
+      }
+      if(theme === "blue") {
+        document.body.style.background = "linear-gradient(135deg,#d6f0ff,#fff)";
+      }
+      if(theme === "dark") {
+        document.body.style.background = "#1e1e2f";
+        document.body.style.color = "white";
+      }
+    }
+
+    function addTask(defaultTask) {
+      let input = document.getElementById("taskInput");
+      let timeInput = document.getElementById("timeInput");
+
+      let taskText = defaultTask || input.value;
+      let time = timeInput.value;
+
+      if(taskText === "") return;
+
+      let li = document.createElement("li");
+
+      let span = document.createElement("span");
+      span.textContent = taskText;
+
+      // MARK DONE
+      span.onclick = function() {
+        span.classList.toggle("done");
+      };
+
+      li.appendChild(span);
+
+      // TIMER
+      if(time) {
+        let timer = document.createElement("small");
+        timer.textContent = " ⏳ " + time + "m";
+        li.appendChild(timer);
+      }
+
+      // DELETE → ARCHIVE
+      let del = document.createElement("button");
+      del.textContent = "🗑️";
+
+      del.onclick = function() {
+        let arch = document.createElement("li");
+        arch.textContent = taskText;
+        document.getElementById("archive").appendChild(arch);
+        li.remove();
+      };
+
+      li.appendChild(del);
+
+      document.getElementById("taskList").appendChild(li);
+
+      input.value = "";
+      timeInput.value = "";
+    }
+
+  </script>
+
+</body>
+</html>
